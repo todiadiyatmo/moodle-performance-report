@@ -94,7 +94,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 
 			if (!empty($data['student_stat'][$student_id]['activities'])) {
 				foreach ($data['student_stat'][$student_id]['activities'] as $v_data) :
-					$data_student[] = ceil($v_data); $nn++;
+					$data_student[] = number_format(round($v_data,1),1); $nn++;
 				endforeach;
 				
 				$course = $DB->get_record('course',['id'=> $id]);
