@@ -38,32 +38,10 @@ function report_performance_student_extend_navigation_course($navigation, $cours
     require_once($CFG->libdir.'/completionlib.php');
 
     $showonnavigation = has_capability('report/performance_student:view', $context);
-    // $group = groups_get_course_group($course,true); // Supposed to verify group
-    // if($group===0 && $course->groupmode==SEPARATEGROUPS) {
-    //     $showonnavigation = ($showonnavigation && has_capability('moodle/site:accessallgroups', $context));
-    // }
-
-    // $completion = new completion_info($course);
-    // $showonnavigation = ($showonnavigation && $completion->is_enabled() && $completion->has_activities());
     if ($showonnavigation) {
         $url = new moodle_url('/report/performance_student/index.php', array('course'=>$course->id));
+        $url_cache = new moodle_url('/report/performance_student/cache.php', array());
         $navigation->add('Performance Report', $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $navigation->add('Performance Report - Clear Cache', $url_cache, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
     }
 }
-
-/**
- * Return a list of page types
- * @param string $pagetype current page type
- * @param stdClass $parentcontext Block's parent context
- * @param stdClass $currentcontext Current context of block
- * @return array
- */
-// function report_performance_student_page_type_list($pagetype, $parentcontext, $currentcontext) {
-//     $array = array(
-//         '*'                     => get_string('page-x', 'pagetype'),
-//         'report-*'              => get_string('page-report-x', 'pagetype'),
-//         'report-tonjoo-*'     => get_string('page-report-tonjoo-x',  'report_performance_student'),
-//         'report-tonjoo-index' => get_string('page-report-tonjoo-index',  'report_performance_student'),
-//     );
-//     return $array;
-// }

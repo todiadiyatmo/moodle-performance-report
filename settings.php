@@ -24,16 +24,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-
 // // // No report settings.
 $settings = null;
 
 if ( $hassiteconfig ) {
-
-	$ADMIN->add( 'reports', new admin_category( 'report_performance_student_setup', 'Performance Student Setting' ) );
-
 	$settings = new admin_settingpage( 'report_performance_student', 'Performance Student API' );
-    
+
 	$settings->add(
         new admin_setting_configcheckbox(
             'report_performance_student/enabled',
@@ -42,17 +38,13 @@ if ( $hassiteconfig ) {
 			'1'
         )
     );
-    
-    // $ADMIN->add( 'report_performance_student_setup', $settings );
-
-    // $settings_path = new admin_settingpage( 'report_performance_student_path', 'Performance Student API' );
-    
+        
 	$settings->add(
         new admin_setting_configtext(
             'report_performance_student/path',
 			'Base Path API',
-			'Mandatory before using plugin. Path = http://elok.dev.ugm.ac.id/moodleLA/api/activities/class/',
-            'http://elok.dev.ugm.ac.id/moodleLA/api/activities/class/'
+			'Mandatory before using plugin. Path = http://elok.dev.ugm.ac.id/moodleLA/api',
+            'http://elok.dev.ugm.ac.id/moodleLA/api'
         )
     );
 
@@ -132,9 +124,11 @@ if ( $hassiteconfig ) {
             
         )
     );
-    
-    $ADMIN->add( 'report_performance_student_setup', $settings );
-    
+
+    $ADMIN->add('root', new admin_externalpage('report_performance_student_api', 'Performance Student API',
+        $CFG->wwwroot."/admin/settings.php?section=report_performance_student", 'report/performance_student:view'));
+    $ADMIN->add('root', new admin_externalpage('report_performance_student_cache', 'Performance Student API Cache',
+        $CFG->wwwroot."/report/performance_student/cache.php", 'report/performance_student:view'));    
 
 }
 
