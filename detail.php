@@ -46,19 +46,20 @@ if(empty($student_id)){
     return;
 }
 
-$rps_config = get_config('report_performance_student');
-$path 			= $rps_config->path;
-$username 	= $rps_config->username;
-$password 	= $rps_config->password;
-$event_group= $rps_config->event_group;
-$url				= '/report/performance_student/detail.php';
-$html				= '';
+$rps_config 	= get_config('report_performance_student');
+$path 				= $rps_config->path;
+$username 		= $rps_config->username;
+$password 		= $rps_config->password;
+$event_group	= $rps_config->event_group;
+$url					= '/report/performance_student/detail.php';
+$html					= '';
+$count_local	= $DB->count_records('performance_student', []);
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('course');
 $PAGE->set_url($url);
 
-if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,2) || user_has_role_assignment($USER->id,3) || $USER->id == $student_id) {
+if ( (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,2) || user_has_role_assignment($USER->id,3) || $USER->id == $student_id) && $count_local != 0 ) {
 	$url_api = $rps_config->path.'/activities/class/'.$id.'/user/'.$student_id; 
 	$client = new GuzzleHttp\Client();
 

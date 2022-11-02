@@ -65,7 +65,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 	if (  empty($reset_cache) || $reset_cache == 0  ) {
 			$html .= '
 				<p>Please click button below to clear Cache API performance. </p>
-				<a href="'.$CFG->wwwroot.$url.'?reset_cache=1" onclick="return confirm(\'Are you sure want to delete local performance data? (data cannot be restored)\')" class="btn btn-primary">Clear cache API Performance</a>
+				<a href="'.$CFG->wwwroot.$url.'?reset_cache=1" onclick="return confirm(\'Are you sure want to delete Cache API Perfomance data? (data cannot be restored)\')" class="btn btn-primary">Clear cache API Performance</a>
 			';
 	}
 	else{
