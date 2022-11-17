@@ -91,11 +91,29 @@ if ( (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->i
 			$html.='Moodle is still analyze log, please wait..';
 		}
 		else{
-			$data_student = []; $nn = 0;
+			$data_student = []; $nn = 0; $li = '';
 
 			if (!empty($data['student_stat'][$student_id]['activities'])) {
-				foreach ($data['student_stat'][$student_id]['activities'] as $v_data) :
+				foreach ($data['student_stat'][$student_id]['activities'] as $key => $v_data) :
 					$data_student[] = number_format(round($v_data,1),1); $nn++;
+					$li .= '
+					<li class="row">
+						
+						'.$key.'<br>
+						<div class="bar_container">
+							<span class="bar" data-bar=\'{ "color": rgb(251,63,63) }\'>
+								<span class="pct">'.(number_format(round($v_data,1),1)/4*100).'%</span><span class="marker"><i class="fa fa-map-marker"></i></span>
+							</span>
+						</div>
+							<span class="low">Low</span>
+							<span class="hight">Hight</span>
+						<div class="right">
+							<span class="label-percent">
+						'.(number_format(round($v_data,1),1)/4*100).'%
+							</span>
+						</div>
+					</li>
+					';
 				endforeach;
 				
 				$course = $DB->get_record('course',['id'=> $id]);
@@ -104,8 +122,12 @@ if ( (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->i
 					<h2>Moodle Alaytics</h2>
 					<h4>Course : '.$course->fullname.'</h4>
 					<h4>Student : '.$data['student_stat'][$student_id]['name'].'</h4>
-					<div class="chart-container container" style="position: relative;">
+					<div class="chart-container container row" style="position: relative;">
 						<canvas id="studentCart"></canvas>
+						<ul id="skills">
+							'.$li.'
+							
+						</ul>
 					</div>
 				';
 			}
@@ -123,6 +145,67 @@ else{
 }
 
 echo $OUTPUT->header();
+echo '
+<style>
+
+ul {
+  list-style-type: none;
+}
+#skills {
+  margin: 0 auto;
+  width: 90%;
+}
+#skills li {
+  position: relative;
+  margin-bottom: 32px;
+  padding-left: 6px;
+}
+.bar_container,
+.bar {
+  position: absolute;
+  left: 0;
+  height: 5px;
+  border-radius: 5px;
+  content: "";
+}
+.bar_container {
+  bottom: -8px;
+  width: 90%;
+  background: rgb(251,63,63);
+	background: linear-gradient(90deg, rgba(251,63,63,1) 0%, rgba(250,110,35,1) 25%, rgba(249,187,0,1) 50%, rgba(133,238,66,1) 80%, rgba(0,110,29,1) 100%);
+  text-align: right;
+}
+.bar {
+  top: 0;
+}
+.pct {
+  position: absolute;
+  top: -19px;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.3s linear;
+	font-color:#000;
+}
+.low {
+	top: 26px;
+	position: relative;
+	left: 0%;
+	font-size: 10px;
+}
+.hight {
+	top: 26px;
+	position: relative;
+	right: -83%;
+	font-size: 10px;
+}
+.marker {
+	position: relative;
+	top: -20px;
+}
+.label-percent {
+	font-weight: 700;
+}
+</style>';
 echo $OUTPUT->heading('Student and Teacher performance report');
 echo '<hr>'.$html;
 ?>
@@ -161,6 +244,34 @@ echo '<hr>'.$html;
 					}
 				}
 		});
+
+		$(".bar").each(function() {
+    
+			var $bar = $(this),
+					$pct = $bar.find(".pct"),
+					data = $bar.data("bar");
+			
+			setTimeout(function() {
+				
+				$bar
+					.css("background-color", data.color)
+					.animate({
+						"width": $pct.html()
+						
+				}, data.speed || 2000, function() {
+					
+					$pct.css({
+						"color": data.color,
+						"opacity": 1,
+						"display": "none"
+					});
+					
+				});
+				
+			}, data.delay || 0);
+			
+		});
+
 
 </script>
 

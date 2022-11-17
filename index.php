@@ -99,7 +99,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 			$data	= json_decode($response->getBody(),true);
 			$html.= '<p>Cache : '.$data['status'].'</p>';
 
-			if ($data['status'] != 'cached') {
+			if ($data['status'] == 'cached') {
 				$html.= 'Moodle is still analyze log, please wait..';
 			}
 			else{
