@@ -50,8 +50,8 @@ $rps_config 	= get_config('report_performance_student');
 $path 				= $rps_config->path;
 $username 		= $rps_config->username;
 $password 		= $rps_config->password;
-$event_group	= $rps_config->event_group;
-$url					= '/report/performance_student/detail.php';
+$event_group	= $rps_config->event_group_faculty ?? '{}';
+$url					= '/report/performance_student/teacher_detail.php';
 $html					= '';
 $count_local	= $DB->count_records('performance_student', []);
 
@@ -59,8 +59,8 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('course');
 $PAGE->set_url($url);
 
-if ( (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,2) || user_has_role_assignment($USER->id,3) || $USER->id == $student_id) && $count_local != 0 ) {
-	$url_api = $rps_config->path.'/student/activities/class/'.$id.'/user/'.$student_id; 
+if (  (is_siteadmin() || $USER->id == $student_id) && $count_local != 0 ) {
+	$url_api = $rps_config->path.'/faculty/activities/class/'.$id.'/user/'.$student_id; 
 	$client = new GuzzleHttp\Client();
 
 	try {
@@ -84,12 +84,12 @@ if ( (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->i
 	}
 		
 	if ($res_code == 200) {
-		$data = json_decode($response->getBody(),true);
+		$data = json_decode($response->getBody(),true);	
 		$html.='
 		<div class="float-left mt-1 mb-1 activity-navigation">
 				<a href="'.$CFG->wwwroot.'/course/view.php?id='.$id.'" id="prev-activity-link" class="btn btn-link">◄ Back to Course</a>
 		</div>
-		';		
+		';	
 		$html.= '<p>Cache : '.$data['status'].'</p>';
 
 		if ($data['status'] != 'cached') {
@@ -129,7 +129,7 @@ if ( (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->i
 				$html.= '
 					<h2>Moodle Alaytics</h2>
 					<h4>Course : '.$coursename.'</h4>
-					<h4>Student : '.$data['student_stat'][$student_id]['name'].'</h4>
+					<h4>Teacher : '.$data['student_stat'][$student_id]['name'].'</h4>
 					<div class="chart-container container row" style="position: relative;">
 						<canvas id="studentCart"></canvas>
 						<ul id="skills">
@@ -221,7 +221,7 @@ p.key{
 	font-weight: 700;
 }
 </style>';
-echo $OUTPUT->heading('Student Performance Indicator');
+echo $OUTPUT->heading('Teacher Performance Indicator');
 echo '<hr class="divider line-01">'.$html;
 ?>
 
@@ -292,3 +292,4 @@ echo '<hr class="divider line-01">'.$html;
 
 <?php 
 echo $OUTPUT->footer();
+

@@ -33,15 +33,44 @@ defined('MOODLE_INTERNAL') || die;
  * @param stdClass $context The context of the course
  */
 function report_performance_student_extend_navigation_course($navigation, $course, $context) {
-    global $CFG, $OUTPUT;
+    if (!get_config('core_competency', 'enabled')) {
+        return;
+    }
+    global $CFG;
 
     require_once($CFG->libdir.'/completionlib.php');
 
     $showonnavigation = has_capability('report/performance_student:view', $context);
     if ($showonnavigation) {
         $url = new moodle_url('/report/performance_student/index.php', array('course'=>$course->id));
-        $url_cache = new moodle_url('/report/performance_student/cache.php', array());
-        $navigation->add('Performance Report', $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-        $navigation->add('Performance Report - Clear Cache', $url_cache, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $navigation->add('Performance Report Student', $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+
+        $url_faculty = new moodle_url('/report/performance_student/teacher.php', array('course'=>$course->id));
+        $navigation->add('Performance Report Teacher', $url_faculty, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+
+    }
+    
+}
+global $PAGE, $USER;
+if ($PAGE->course && $PAGE->course->id != 1) {
+    $context = context_course::instance($PAGE->course->id);
+    $new_url = '';
+    $url_index_student = '';
+    if ( user_has_role_assignment($USER->id, 1, $context->id) || user_has_role_assignment($USER->id, 2, $context->id) || user_has_role_assignment($USER->id, 3, $context->id) ) {
+        $new_url = '/report/performance_student/teacher_detail.php?course=';
+        $url_index_student = '/report/performance_student/index.php?course=';
+    }
+    else{
+        $new_url = '/report/performance_student/detail.php?course=';
+    }
+    if ( !empty($new_url) ) {
+        $sitenode = $PAGE->navigation->find('site', null);
+        if ($sitenode) {
+            $sitenode->make_active();
+            if (!empty($url_index_student)) {
+                $sitenode->add('All Student Performance', new moodle_url($url_index_student.$PAGE->course->id), navigation_node::TYPE_USER);
+            }
+            $sitenode->add('My Performance', new moodle_url($new_url.$PAGE->course->id.'&student='.$USER->id), navigation_node::TYPE_USER);
+        }
     }
 }

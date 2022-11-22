@@ -47,12 +47,12 @@ $rps_config 	= get_config('report_performance_student');
 $path					= $rps_config->path;
 $username			= $rps_config->username;
 $password			= $rps_config->password;
-$event_group	= $rps_config->event_group;
+$event_group	= $rps_config->event_group_faculty ?? '{}';
 $max_user			= $rps_config->max_user;
-$url 					= '/report/performance_student/index.php';
+$url 					= '/report/performance_student/teacher.php';
 $html 				= '';
 
-if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,2) || user_has_role_assignment($USER->id,3)) {
+if (is_siteadmin()) {
 
 	$cek_cached = $DB->get_record('performance_student', ['course_id' => $id]);
 
@@ -81,7 +81,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 				}
 		}
 		else{
-
+			
 			if(!$cek_cached || empty($cek_cached)){
 				$p_record = new stdClass();
 				$p_record->course_id 		= $id;
@@ -91,7 +91,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 				$DB->insert_record('performance_student', $p_record);
 			}
 	
-			$url_api	= $path.'/student/activities/class/'.$id.'/?force=false'; 
+			$url_api	= $path.'/faculty/activities/class/'.$id.'/?force=false'; 
 			$client		= new GuzzleHttp\Client();
 	
 			try {
@@ -103,6 +103,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 							$username,
 							$password
 						),
+						'accept' => 'application/json',
 						'content-type' => 'application/json',
 						'body' => $event_group
 					),		
@@ -164,7 +165,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 							</tbody>
 						</table>
 					</div>
-					<h4>Student Performance</h4>
+					<h4>Teacher Performance</h4>
 					<div class="overflow-auto">
 						<table class="table table-bordered>
 							<thead class="thead-dark">
@@ -192,7 +193,7 @@ if (user_has_role_assignment($USER->id,1) || user_has_role_assignment($USER->id,
 											<td class="text-center">'.number_format(round($v_data['activities']['Assignment Activity'],1),1).'</td>										
 											<td class="text-center">'.number_format(round($v_data['activities']['Quiz Activity'],1),1).'</td>										
 											<td class="text-center">'.number_format(round($v_data['activities']['Module Completion'],1),1).'</td>
-											<td class="text-center"><a href="'.$CFG->wwwroot.'/report/performance_student/detail.php?course='.$id.'&student='.$key.'">Detail</a></td>
+											<td class="text-center"><a href="'.$CFG->wwwroot.'/report/performance_student/teacher_detail.php?course='.$id.'&student='.$key.'">Detail</a></td>
 									</tr>';
 								endforeach;
 								$html.='	
@@ -220,7 +221,7 @@ $PAGE->set_pagelayout('course');
 $PAGE->set_url($url);
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading('Course Performance Student Indicator');
+echo $OUTPUT->heading('Course Performance Teacher Indicator');
 echo '<hr class="divider line-01">';
 echo '
 <div class="float-left mt-1 mb-1 activity-navigation">

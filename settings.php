@@ -70,8 +70,8 @@ if ( $hassiteconfig ) {
         new admin_setting_configtext(
             'report_performance_student/max_user',
 			'Maximum User per Course',
-			'Set Maximum user. Ex: 500',
-            '500'
+			'Set Maximum user. Ex: 200',
+            '200'
         )
     );
 
@@ -120,6 +120,105 @@ if ( $hassiteconfig ) {
                 ]
              }
              
+            '
+            
+        )
+    );
+
+    $settings->add(
+        new admin_setting_configtextarea(
+            'report_performance_student/event_group_faculty',
+			'Event Group Faculty / Teacher',
+			'Event request body faculty',
+            '
+            { 
+              [
+                {
+                  "Course Engagement": [
+                    "\\core\\event\\course_user_report_viewed",
+                    "\\core\\event\\course_viewed",
+                    "\\gradereport_user\\event\\grade_report_viewed",
+                    "\\mod_lesson\\event\\question_viewed",
+                    "\\mod_page\\event\\course_module_viewed",
+                    "\\mod_resource\\event\\course_module_viewed",
+                    "\\mod_url\\event\\course_module_viewed"
+                  ],
+                  "Social Activity": [
+                    "\\mod_forum\\event\\course_module_viewed",
+                    "\\mod_forum\\event\\discussion_viewed",
+                    "\\mod_forum\\event\\discussion_created",
+                    "\\mod_forum\\event\\post_updated"
+                  ],
+                  "Class Activity": [
+                    "\\mod_lesson\\event\\course_module_viewed",
+                    "\\mod_lesson\\event\\lesson_started",
+                    "\\mod_lesson\\event\\lesson_ended",
+                    "\\mod_lesson\\event\\question_answered"
+                  ],
+                  "Assignment Activity": [
+                    "\\assignsubmission_comments\\event\\comment_created",
+                    "\\assignsubmission_file\\event\\assessable_uploaded",
+                    "\\assignsubmission_file\\event\\submission_created",
+                    "\\assignsubmission_file\\event\\submission_updated",
+                    "\\mod_forum\\event\\assessable_uploaded",
+                    "\\mod_assign\\event\\assessable_submitted",
+                    "\\mod_assign\\event\\submission_form_viewed"
+                  ],
+                  "Quiz Activity": [
+                    "\\mod_hvp\\event\\course_module_viewed",
+                    "\\mod_quiz\\event\\attempt_abandoned",
+                    "\\mod_quiz\\event\\attempt_becameoverdue",
+                    "\\mod_quiz\\event\\attempt_started",
+                    "\\mod_quiz\\event\\attempt_submitted"
+                  ],
+                  "Module Completion": [
+                    "\\core\\event\\course_module_completion_updated"
+                  ]
+                },
+                {
+                  "Course Engagement": [
+                    "\\core\\event\\course_user_report_viewed",
+                    "\\core\\event\\course_viewed",
+                    "\\gradereport_user\\event\\grade_report_viewed",
+                    "\\mod_lesson\\event\\question_viewed",
+                    "\\mod_page\\event\\course_module_viewed",
+                    "\\mod_resource\\event\\course_module_viewed",
+                    "\\mod_url\\event\\course_module_viewed"
+                  ],
+                  "Social Activity": [
+                    "\\mod_forum\\event\\course_module_viewed",
+                    "\\mod_forum\\event\\discussion_viewed",
+                    "\\mod_forum\\event\\discussion_created",
+                    "\\mod_forum\\event\\post_updated"
+                  ],
+                  "Class Activity": [
+                    "\\mod_lesson\\event\\course_module_viewed",
+                    "\\mod_lesson\\event\\lesson_started",
+                    "\\mod_lesson\\event\\lesson_ended",
+                    "\\mod_lesson\\event\\question_answered"
+                  ],
+                  "Assignment Activity": [
+                    "\\assignsubmission_comments\\event\\comment_created",
+                    "\\assignsubmission_file\\event\\assessable_uploaded",
+                    "\\assignsubmission_file\\event\\submission_created",
+                    "\\assignsubmission_file\\event\\submission_updated",
+                    "\\mod_forum\\event\\assessable_uploaded",
+                    "\\mod_assign\\event\\assessable_submitted",
+                    "\\mod_assign\\event\\submission_form_viewed"
+                  ],
+                  "Quiz Activity": [
+                    "\\mod_hvp\\event\\course_module_viewed",
+                    "\\mod_quiz\\event\\attempt_abandoned",
+                    "\\mod_quiz\\event\\attempt_becameoverdue",
+                    "\\mod_quiz\\event\\attempt_started",
+                    "\\mod_quiz\\event\\attempt_submitted"
+                  ],
+                  "Module Completion": [
+                    "\\core\\event\\course_module_completion_updated"
+                  ]
+                }
+              ]
+            }
             '
             
         )
