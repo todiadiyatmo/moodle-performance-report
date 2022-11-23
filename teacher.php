@@ -58,11 +58,7 @@ if (is_siteadmin()) {
 
 	if ( empty($cek_cached) && ( empty($analyze) || $analyze == 0 ) ) {
 		if ( $max_user > 200 ) {
-			$html .= '
-				<p>Please set your <b>max_user</b> setting <= 200.</p>';
-				if (is_siteadmin()) {
-					$html .= '<a href="'.$CFG->wwwroot.'/admin/settings.php?section=report_performance_student" class="btn btn-primary">to Performance Setting</a>';
-				}
+			$html .= '<p>Maximum student exceed '.$max_user.'.</p>';
 		}
 		else{
 			$html .= '
@@ -74,11 +70,7 @@ if (is_siteadmin()) {
 	}
 	else{
 		if ( $max_user > 200 ) {
-			$html .= '
-				<p>Please set your <b>max_user</b> setting <= 200.</p>';
-				if (is_siteadmin()) {
-					$html .= '<a href="'.$CFG->wwwroot.'/admin/settings.php?section=report_performance_student" class="btn btn-primary">to Performance Setting</a>';
-				}
+			$html .= '<p>Maximum student exceed '.$max_user.'.</p>';
 		}
 		else{
 			
