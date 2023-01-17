@@ -66,7 +66,7 @@ if ($PAGE->course && $PAGE->course->id != 1) {
     if ( !empty($new_url) ) {
         $sitenode = $PAGE->navigation->find('site', null);
         if ($sitenode) {
-            $sitenode->make_active();
+            // $sitenode->make_active();
             if (!empty($url_index_student)) {
                 $sitenode->add('All Student Performance', new moodle_url($url_index_student.$PAGE->course->id), navigation_node::TYPE_USER);
             }
